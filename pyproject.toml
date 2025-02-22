@@ -9,7 +9,9 @@ dependencies = [
     "jupyter>=1.1.1",
     "matplotlib>=3.10.0",
     "notebook>=7.3.2",
+    "numpy>=2.2.3",
     "pandas>=2.2.3",
     "scipy>=1.15.2",
+    "tqdm>=4.67.1",
     "xlrd>=2.0.1",
 ]
