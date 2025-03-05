@@ -664,3 +664,59 @@ plt.xticks(ticks=np.arange(len(attribute_names)), labels=attribute_names, rotati
 plt.xlabel('Attributes/features')
 plt.ylabel('Observations')
 plt.show()
+
+#%%
+
+#Prepare the class Labeling for typeA
+
+typeA_cutoff = 55
+
+classLabels_typea = df['typea'].map(lambda x: 'TypeA +' if x >= typeA_cutoff else 'TypeA -').to_numpy()
+classNames_typea = sorted(set(classLabels_typea))
+classDict_typea = dict(zip(classNames, range(len(classLabels))))
+
+# Extract vector y, convert to NumPy array
+y_typea = np.asarray([classDict[value] for value in classLabels])
+
+#%%
+
+from scipy.linalg import svd
+
+# Subtract mean value from data
+Y = X - np.ones((N, 1)) * X.mean(0)
+
+# Subtract the mean from the data and divide by the attribute standard
+# deviation to obtain a standardized dataset:
+Y2 = X - np.ones((N, 1)) * X.mean(0)
+Y2 = Y2 * (1 / np.std(Y2, 0))
+
+# PCA by computing SVD of Y
+U, S, Vh = svd(Y2, full_matrices=False)
+# scipy.linalg.svd returns "Vh", which is the Hermitian (transpose)
+# of the vector V. So, for us to obtain the correct V, we transpose:
+V = Vh.T
+
+# Project the centered data onto principal component space
+# Note: Make absolutely sure you understand what the @ symbol
+# does by inspecing the numpy documentation!
+Z = Y @ V
+
+# Indices of the principal components to be plotted
+i = 0
+j = 1
+
+# Plot PCA of the data
+f = plt.figure(figsize=(10, 5))
+plt.title(f"South african heart disease, most significant PCA components\n TypeA categorized at >={typeA_cutoff}")
+# Z = array(Z)
+
+for c in range(C):
+    # select indices belonging to class c:
+    class_mask = y_typea == c
+    plt.plot(Z[class_mask, i], Z[class_mask, j], "o", alpha=0.5)
+plt.legend(classNames_typea)
+plt.xlabel("PC{0}".format(i + 1))
+plt.ylabel("PC{0}".format(j + 1))
+
+# Output result to screen
+plt.show()
