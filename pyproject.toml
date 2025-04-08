@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "dtuimldmtools>=0.1.6",
     "importlib-resources>=6.5.2",
+    "joblib>=1.4.2",
     "jupyter>=1.1.1",
     "matplotlib>=3.10.0",
     "notebook>=7.3.2",
